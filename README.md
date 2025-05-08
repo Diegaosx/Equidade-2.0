@@ -1,162 +1,84 @@
-# Equidade - Sistema de Gestão para Clínicas de Atendimento a Pessoas com Deficiência
+# Sistema de Gestão de Clínicas
 
-## Visão Geral
+Sistema de gerenciamento para clínicas de reabilitação, com foco em acessibilidade e gestão eficiente de pacientes e profissionais.
 
-Equidade é um sistema completo de gestão para clínicas de atendimento a pessoas com deficiência, desenvolvido para otimizar o fluxo de trabalho e melhorar o atendimento aos pacientes. Este sistema integra funcionalidades de agendamento, gestão de prontuários, acompanhamento de evoluções terapêuticas, controle de unidades e salas, sistema de chat interno, e muito mais.
+## Tecnologias
 
-## Principais Funcionalidades
-
-- **Gestão de Pacientes**: Cadastro completo com histórico médico, documentos e evoluções
-- **Agendamento Inteligente**: Sistema avançado de agendamento com alertas e notificações
-- **Controle de Unidades e Salas**: Gerenciamento de múltiplas unidades e disponibilidade de salas
-- **Evoluções Terapêuticas**: Documentação e acompanhamento do progresso dos pacientes
-- **Chat Interno**: Comunicação em tempo real entre profissionais
-- **Gestão de Documentos**: Upload, assinatura e compartilhamento de documentos
-- **Relatórios e Estatísticas**: Dados analíticos para tomada de decisão
-- **Controle de Acesso**: Diferentes níveis de permissão baseados em cargos
-- **Acessibilidade**: Interface adaptada para diferentes necessidades
-- **Suporte Offline**: Funcionalidades disponíveis mesmo sem conexão à internet
-
-## Tecnologias Utilizadas
-
-- **Frontend**: React, TailwindCSS, Shadcn/UI, React Query
+- **Frontend**: React, TypeScript, TailwindCSS, Shadcn UI
 - **Backend**: Node.js, Express
-- **Banco de Dados**: PostgreSQL com Drizzle ORM
-- **Comunicação em Tempo Real**: WebSockets
-- **PWA**: Progressive Web App com suporte offline
-- **Autenticação**: Sistema de autenticação customizado com controle de sessão
+- **Banco de Dados**: PostgreSQL (Railway)
+- **ORM**: Drizzle
+- **Infraestrutura**: Vercel (deploy)
 
-## Requisitos
+## Características
 
-- Node.js 20.x ou superior
-- PostgreSQL 15.x ou superior
-- Navegador moderno (Chrome, Firefox, Safari, Edge)
+- Gerenciamento de pacientes e profissionais
+- Agendamento de consultas e procedimentos
+- Evolução de pacientes
+- Upload e gestão de documentos
+- Chat entre profissionais
+- Notificações em tempo real (WebSockets)
+- Gestão de múltiplas unidades/clínicas
+- Conformidade com LGPD
 
-## Instalação para Desenvolvimento
+## Configuração Local
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/equidade/sistema-clinica.git
-   cd sistema-clinica
+1. Clone o repositório
+2. Instale as dependências: `npm install`
+3. Configure o arquivo `.env` com suas variáveis de ambiente:
    ```
-
-2. Instale as dependências:
-   ```bash
-   npm install
+   DATABASE_URL=sua_string_de_conexao_postgresql
+   SESSION_SECRET=sua_chave_secreta
+   NODE_ENV=development
+   PORT=5000
    ```
+4. Execute as migrações: `npm run db:push`
+5. Popule o banco com dados iniciais: `npm run db:seed`
+6. Inicie o servidor de desenvolvimento: `npm run dev`
 
-3. Configure as variáveis de ambiente (copie o arquivo .env.example):
-   ```bash
-   cp .env.example .env
-   # Edite o arquivo .env com as configurações do seu ambiente
-   ```
+## Deploy no Vercel com Railway
 
-4. Configure o banco de dados:
-   ```bash
-   npm run db:push   # Cria/atualiza as tabelas do banco
-   npm run db:seed   # Popula o banco com dados iniciais
-   ```
+### 1. Configurar o banco de dados no Railway
 
-5. Inicie o servidor de desenvolvimento:
-   ```bash
-   npm run dev
-   ```
+1. Crie uma conta no [Railway](https://railway.app/)
+2. Crie um novo projeto e selecione PostgreSQL
+3. Após a criação, acesse a aba "Connect" e copie a connection string
 
-6. Acesse a aplicação:
-   ```
-   http://localhost:5000
-   ```
+### 2. Configurar o projeto no Vercel
 
-## Implantação em Produção
+1. Crie uma conta no [Vercel](https://vercel.com/)
+2. Importe o repositório do GitHub
+3. Configure as seguintes variáveis de ambiente:
+   - `DATABASE_URL` (string de conexão do Railway)
+   - `SESSION_SECRET` (chave secreta para sessões)
+   - `NODE_ENV=production`
+4. Deploy!
 
-Para implantar em produção, recomendamos utilizar o Railway, uma plataforma moderna e simples para hospedagem de aplicações web.
+### 3. Executar migrações no banco de dados
 
-### Arquivos de Configuração do Deploy
-
-O projeto conta com diversos arquivos para otimizar a implantação:
-
-- `railway.json`: Configuração principal para o Railway
-- `.railway/runtime.json`: Configurações de recursos e monitoramento
-- `nixpacks.toml`: Instruções para build do container
-- `Procfile`: Definição do comando de inicialização
-- `nginx.conf`: Configuração do servidor web
-- `scripts/railway-start.sh`: Script de inicialização específico para o Railway
-- `scripts/backup.sh`: Script para backup automático do banco de dados
-- `.github/workflows/railway-deploy.yml`: Configuração para CI/CD com GitHub Actions
-- `static.json`: Configuração para ativos estáticos
-- `.dockerignore`: Lista de arquivos a serem ignorados no build
-- `.gitattributes`: Configuração de atributos de arquivo
-- `.nvmrc`: Definição da versão do Node.js
-
-### Deployment com GitHub Actions
-
-Para configurar deploy automático via GitHub Actions:
-
-1. Faça fork do repositório para sua conta GitHub
-2. Crie um token de API no Railway (Settings > API > New Token)
-3. Adicione o token como um segredo no GitHub (Settings > Secrets > RAILWAY_TOKEN)
-4. Cada push para a branch principal iniciará automaticamente uma implantação
-
-### Deployment Manual
-
-1. Instale a CLI do Railway: `npm install -g @railway/cli`
-2. Faça login: `railway login`
-3. Vincule ao projeto: `railway link`
-4. Implante: `railway up`
-
-Para instruções detalhadas, consulte o [Guia de Implantação no Railway](docs/railway_deployment_guide.md).
+```bash
+# Localmente, com a variável DATABASE_URL apontando para o Railway
+npm run db:migrate
+```
 
 ## Estrutura do Projeto
 
-```
-├── client/                 # Frontend da aplicação
-│   ├── public/             # Arquivos públicos
-│   └── src/                # Código-fonte do frontend
-│       ├── components/     # Componentes React
-│       ├── hooks/          # React Hooks customizados
-│       ├── lib/            # Utilitários e funções
-│       └── pages/          # Páginas da aplicação
-├── server/                 # Backend da aplicação
-│   ├── index.ts            # Ponto de entrada
-│   ├── routes.ts           # Definição de rotas da API
-│   └── auth.ts             # Sistema de autenticação
-├── db/                     # Configuração do banco de dados
-│   ├── index.ts            # Conexão com banco
-│   └── seed.ts             # População inicial
-├── shared/                 # Código compartilhado
-│   └── schema.ts           # Schemas do banco de dados
-├── scripts/                # Scripts de utilidade
-└── docs/                   # Documentação
-```
+- `/api` - Endpoints serverless para Vercel
+- `/client` - Frontend React
+- `/server` - Backend Express
+- `/db` - Configuração de banco de dados
+- `/shared` - Schemas e tipos compartilhados
+- `/uploads` - Arquivos enviados pelos usuários
 
-## Usuários Padrão
+## Migração do Replit para Vercel/Railway
 
-Para testes e desenvolvimento, os seguintes usuários são criados durante o seed:
+Esta versão do projeto foi migrada do Replit para Vercel e Railway, com adaptações para funcionar como serverless na infraestrutura do Vercel. As principais mudanças incluem:
 
-- **Administrador**: admin / admin123
-- **Coordenador**: coordenador / coord123
-- **Profissional**: amanda / amanda123, carlos / carlos123, juliana / juliana123
-- **Estagiário**: estagiario / estagiario123
-- **Secretário**: secretaria / secretaria123
-
-## Contribuição
-
-Para contribuir com o desenvolvimento:
-
-1. Crie um fork do repositório
-2. Crie um branch para sua feature (`git checkout -b feature/nome-da-feature`)
-3. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`)
-4. Faça push para o branch (`git push origin feature/nome-da-feature`)
-5. Abra um Pull Request
-
-## Suporte
-
-Para obter suporte, entre em contato pelo e-mail suporte@equidade.com.br ou abra uma issue no repositório do projeto.
+1. Configurações específicas para o Vercel (vercel.json)
+2. Adaptação do sistema de autenticação para funcionar sem depender do Replit Auth
+3. Configuração para usar PostgreSQL no Railway
+4. Otimização do código para ambiente serverless
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para mais detalhes.
-
----
-
-Desenvolvido com ❤️ para melhorar o atendimento às pessoas com deficiência.
+MIT

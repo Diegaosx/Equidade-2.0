@@ -1,34 +1,34 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "buildCommand": "npm run build",
-        "distDir": "dist"
-      }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
+  "functions": {
+    "api/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|json|svg|webp)$)",
-      "dest": "/client/dist/$1"
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|json|webp|woff|woff2|ttf|otf)$)",
+      "dest": "/client/$1"
+    },
+    {
+      "src": "/uploads/(.*)",
+      "dest": "/uploads/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/client/dist/index.html"
+      "dest": "/client/index.html"
     }
   ],
   "env": {
+    "DATABASE_URL": "postgresql://postgres:QgwSHjfDLlBmHKgXLpzelcEprrzQWRhT@yamanote.proxy.rlwy.net:56390/railway",
     "NODE_ENV": "production"
   }
 }

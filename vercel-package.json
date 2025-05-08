@@ -1,0 +1,15 @@
+{
+  "name": "clinic-management-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development node api/index.js",
+    "build": "vite build && tsc && node build-server.js",
+    "start": "NODE_ENV=production node dist/server/index.js",
+    "db:migrate": "NODE_ENV=production drizzle-kit push:pg --config=drizzle.production.config.ts"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
