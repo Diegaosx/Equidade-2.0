@@ -1,16 +1,29 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import { Pool } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from "@shared/schema";
+import config from '../config';
 
-// This is the correct way neon config - DO NOT change this
-neonConfig.webSocketConstructor = ws;
+// Registrar a string de conexão para debug (remover em produção)
+console.log('Database connection string available:', !!config.databaseUrl);
 
-if (!process.env.DATABASE_URL) {
+if (!config.databaseUrl) {
   throw new Error(
     "DATABASE_URL must be set. Did you forget to provision a database?",
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const pool = new Pool({
+  connectionString: config.databaseUrl,
+  ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false
+});
+
 export const db = drizzle({ client: pool, schema });
+
+// Test database connection (can be removed in production)
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('Error connecting to database:', err);
+  } else {
+    console.log('Database connected successfully:', res.rows[0]);
+  }
+});

@@ -1,8 +1,10 @@
 
+import '../config'; // Carregar configurações antes de tudo
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import cors from "cors";
+import config from '../config';
 
 const app = express();
 
@@ -60,8 +62,10 @@ app.use((req, res, next) => {
   }
 
   // Iniciar servidor
-  const port = 5000;
+  const port = config.port || 5000;
   server.listen(port, "0.0.0.0", () => {
     log(`Servidor rodando na porta ${port}`);
+    log(`Ambiente: ${config.nodeEnv}`);
+    log(`Database URL configurada: ${!!config.databaseUrl}`);
   });
 })();

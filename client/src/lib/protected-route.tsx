@@ -35,19 +35,9 @@ export function ProtectedRoute({ path, component: Component }: ProtectedRoutePro
           return;
         }
 
-        // Sempre verificar com o servidor para garantir sessão válida
-        const timestamp = new Date().getTime();
-        const response = await fetch(`/api/user?_=${timestamp}`, {
-          credentials: 'include',
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
-        });
-        
         // Verificar se o usuário está autenticado com cache-busting
         const timestamp = new Date().getTime();
-        const response = await fetch(`/api/user?_=${timestamp}`, { 
+        const response = await fetch(`/api/auth/user?_=${timestamp}`, { 
           credentials: 'include',
           headers: {
             'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -69,7 +59,7 @@ export function ProtectedRoute({ path, component: Component }: ProtectedRoutePro
           }
           
           // Atualizar o cache do queryClient
-          queryClient.setQueryData(['/api/user'], data);
+          queryClient.setQueryData(['/api/auth/user'], data);
         } else {
           console.log("Protected Route: User not authenticated via API");
           setIsAuthenticated(false);
